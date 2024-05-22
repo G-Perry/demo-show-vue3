@@ -20,8 +20,4 @@ yarn dev
 
 # 构建生产环境 yarn build:prod
 
-# 前端访问地址 http://localhost:80
-
-```
-
-```
+# 前端访问地址 http://localhost:8080
