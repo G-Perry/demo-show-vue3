@@ -6,7 +6,7 @@
 
 # 进入项目目录
 
-cd RuoYi-Vue3
+cd demo-show-vue3
 
 # 安装依赖
 
