@@ -89,6 +89,10 @@ export function commonCURD() {
       .catch(() => {});
   }
 
+  // function cccccc() {
+  //   console.log(this, "cccccc");
+  // }
+
   // 通过返回值暴露所管理的状态
   return {
     initDataOrApi,
@@ -104,6 +108,7 @@ export function commonCURD() {
     handleAdd,
     handleUpdate,
     handleDelete,
+    // cccccc
   };
 }
 

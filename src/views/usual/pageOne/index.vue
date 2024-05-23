@@ -9,7 +9,11 @@
           @click="handleUpdate(ids,handleUpdateSelfChange)"
         >修改</button>
         <button class="anfu_btn danger" :disabled="multiple" @click="handleDelete(ids)">删除</button>
-        <button class="anfu_btn warning">导出</button>
+        <button class="anfu_btn edit" :disabled="multiple" @click="handleStatusChange('on')">启用</button>
+        <button class="anfu_btn danger" :disabled="multiple" @click="handleStatusChange('off')">禁用</button>
+        <!-- <button class="anfu_btn warning" @click="aaaaaa()">导出</button>
+        <button class="anfu_btn warning" @click="bbbbbb">导出</button>
+        <button class="anfu_btn warning" @click="cccccc">导出</button>-->
       </page-header>
 
       <section class="search_bar">
@@ -113,6 +117,7 @@ const {
   handleAdd,
   handleUpdate,
   handleDelete,
+  // cccccc,
 } = CRUD;
 
 // 表格高度自适应
@@ -158,6 +163,31 @@ function handleUpdateSelfChange(proxy, response) {
 }
 
 const { proxy } = getCurrentInstance();
+function handleStatusChange(sign) {
+  proxy.$modal
+    .confirm(
+      "此操作将 " + (sign == "off" ? "禁用" : "启用") + " 账号, 是否继续?",
+      "提示",
+      {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }
+    )
+    .then(() => {
+      let data = {
+        id: ids.value,
+        status: sign == "off" ? 0 : 1,
+      };
+      updateUserStatusById(data).then((res) => {
+        res.code == 200 && (getList(), proxy.$modal.msgSuccess("修改成功"));
+      });
+    })
+    .catch(() => {
+      proxy.$modal.msg("操作取消");
+    });
+}
+// console.log(proxy, 333);
 function handleStatusSwitchChange(row) {
   proxy.$modal
     .confirm(
@@ -178,15 +208,21 @@ function handleStatusSwitchChange(row) {
         status: row.status == 0 ? 0 : 1,
       };
       updateUserStatusById(data).then((res) => {
-        res.code == 200 && this.getList();
+        res.code == 200 && (getList(), proxy.$modal.msgSuccess("修改成功"));
       });
-      proxy.$modal.msgSuccess("修改成功");
     })
     .catch(() => {
       row.status = row.status == 0 ? 1 : 0;
       proxy.$modal.msg("操作取消");
     });
 }
+
+// function aaaaaa() {
+//   console.log(this, 888);
+// }
+// function bbbbbb() {
+//   console.log(this, 999);
+// }
 
 // 暴露getlist方法
 defineExpose({ getList });
