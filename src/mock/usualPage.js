@@ -115,7 +115,7 @@ export default {
   // 根据ID删除用户
   userDeleteById(config) {
     console.log("userDeleteById");
-    console.log(config);
+    // console.log(config);
     let ids = config.url.split("/").pop().split(",");
     List = List.filter((item) => !ids.includes(item.id));
     return {
