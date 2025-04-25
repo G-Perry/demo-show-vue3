@@ -46,7 +46,21 @@ export function userEdit(data) {
 // 删除用户
 export function userDeleteById(id) {
   return http.request({
-    url: '/usual/userDelete/' + id,
-    method: 'delete'
-  })
+    url: "/usual/userDelete/" + id,
+    method: "delete",
+  });
+}
+
+// export async function getSelectOptions() {
+//   await new Promise((resolve) => setTimeout(resolve, 2000));
+//   return http.request({
+//     url: "/usual/select/options",
+//     method: "get",
+//   });
+// }
+export function getSelectOptions() {
+  return http.request({
+    url: "/usual/select/options",
+    method: "get",
+  });
 }

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "2.3.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
     "@vueup/vue-quill": "1.2.0",
     "@vueuse/core": "10.6.1",
     "axios": "0.27.2",
@@ -29,6 +30,7 @@
     "mockjs": "^1.1.0",
     "nprogress": "0.2.0",
     "pinia": "2.1.7",
+    "vant": "^4.9.19",
     "vue": "3.3.9",
     "vue-cropper": "1.1.1",
     "vue-router": "4.2.5"

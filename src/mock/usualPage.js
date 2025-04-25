@@ -123,4 +123,67 @@ export default {
       msg: "",
     };
   },
+  // getSelectOptions: async () => {
+  // // getSelectOptions() {
+  //   await new Promise((resolve) => setTimeout(resolve, 2000));
+  //   return {
+  //     code: 200,
+  //     msg: "",
+  //     data: [
+  //       { value: 0, label: "aaa" },
+  //       { value: 1, label: "bbb" },
+  //       { value: 2, label: "ccc" },
+  //       { value: 3, label: "ddd" },
+  //       { value: 4, label: "eee" },
+  //       { value: 5, label: "fff" },
+  //       { value: 6, label: "ggg" },
+  //       { value: 7, label: "hhh" },
+  //       { value: 8, label: "iii" },
+  //       { value: 9, label: "jjj" },
+  //       { value: 10, label: "kkk" },
+  //     ],
+  //   };
+  // },
+  // getSelectOptions() {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       resolve({
+  //         code: 200,
+  //         msg: "",
+  //         data: [
+  //           { value: 0, label: "aaa" },
+  //           { value: 1, label: "bbb" },
+  //           { value: 2, label: "ccc" },
+  //           { value: 3, label: "ddd" },
+  //           { value: 4, label: "eee" },
+  //           { value: 5, label: "fff" },
+  //           { value: 6, label: "ggg" },
+  //           { value: 7, label: "hhh" },
+  //           { value: 8, label: "iii" },
+  //           { value: 9, label: "jjj" },
+  //           { value: 10, label: "kkk" },
+  //         ],
+  //       });
+  //     }, 2000);
+  //   });
+  // },
+  getSelectOptions() {
+    return {
+      code: 200,
+      msg: "",
+      data: [
+        { value: 0, label: "aaa" },
+        { value: 1, label: "bbb" },
+        { value: 2, label: "ccc" },
+        { value: 3, label: "ddd" },
+        { value: 4, label: "eee" },
+        { value: 5, label: "fff" },
+        { value: 6, label: "ggg" },
+        { value: 7, label: "hhh" },
+        { value: 8, label: "iii" },
+        { value: 9, label: "jjj" },
+        { value: 10, label: "kkk" },
+      ],
+    };
+  },
 };
