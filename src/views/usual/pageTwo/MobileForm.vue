@@ -42,7 +42,6 @@ export default defineComponent({
     const renderForm = (formConfig) => {
       return (
         <van-form>
-          {/* <van-cell-group>{renderFormItem(formConfig)}</van-cell-group> */}
           <van-cell-group border={false}>
             {renderFormItem(formConfig)}
           </van-cell-group>
@@ -79,10 +78,6 @@ export default defineComponent({
       switch (item.type) {
         case "input":
           return (
-            // <el-input
-            //   v-model={props.modelValue[item.prop]}
-            //   placeholder={item.placeholder}
-            // />
             <van-field
               v-model={props.modelValue[item.prop]}
               name={item.prop}
@@ -92,15 +87,10 @@ export default defineComponent({
           );
         case "textarea":
           return (
-            // <el-input
-            //   v-model={props.modelValue[item.prop]}
-            //   placeholder={item.placeholder}
-            //   type="textarea"
-            //   rows={4}
-            // />
             <van-field
               v-model={props.modelValue[item.prop]}
               placeholder={item.placeholder}
+              name={item.prop}
               label={item.label}
               rows="2"
               autosize
@@ -118,15 +108,44 @@ export default defineComponent({
           );
         case "radio":
           return (
-            <el-radio-group v-model={props.modelValue[item.prop]}>
-              {item.options.map((option) => (
-                <el-radio key={option.value} label={option.value}>
-                  {option.label}
-                </el-radio>
-              ))}
-            </el-radio-group>
+            <van-field name={item.prop} label={item.label} label-align="top">
+              {{
+                input: () => (
+                  <van-radio-group
+                    v-model={props.modelValue[item.prop]}
+                    shape="dot"
+                    class="mobile-radio-group"
+                  >
+                    {item.options.map((option) => (
+                      <van-radio key={option.value} name={option.value}>
+                        {option.label}
+                      </van-radio>
+                    ))}
+                  </van-radio-group>
+                ),
+              }}
+            </van-field>
           );
         case "checkbox":
+          return (
+            <van-field name={item.prop} label={item.label} label-align="top">
+              {{
+                input: () => (
+                  <van-checkbox-group
+                    v-model={props.modelValue[item.prop]}
+                    shape="square"
+                    class="mobile-radio-group"
+                  >
+                    {item.options.map((option) => (
+                      <van-checkbox key={option.value} name={option.value}>
+                        {option.label}
+                      </van-checkbox>
+                    ))}
+                  </van-checkbox-group>
+                ),
+              }}
+            </van-field>
+          );
           return (
             <el-checkbox-group v-model={props.modelValue[item.prop]}>
               {item.options.map((option) => (
@@ -199,7 +218,18 @@ export default defineComponent({
             />
           );
         case "switch":
-          return <el-switch v-model={props.modelValue[item.prop]} />;
+          return (
+            <van-field name={item.prop} label={item.label}>
+              {{
+                input: () => (
+                  <van-switch
+                    v-model={props.modelValue[item.prop]}
+                    size="20px"
+                  />
+                ),
+              }}
+            </van-field>
+          );
 
         default:
           return <div>-</div>;
@@ -209,3 +239,11 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.mobile-radio-group {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(80px, 30%, 200px), 1fr));
+  gap: 10px;
+}
+</style>

@@ -14,7 +14,9 @@ const formRef = ref(); // 表单 Ref
 const formConfig = ref(formConfigs);
 const formData = ref({
   input: undefined,
-  select: undefined,
+  select: 5,
+  select1: undefined,
+  select2: 0,
   textarea: undefined,
   radio: undefined,
   checkbox: [],
@@ -65,6 +67,7 @@ onMounted(async () => {
   position: relative;
   display: block;
   width: 100%;
+  margin-top: 10px;
   margin-bottom: 20px;
 
   &::after {

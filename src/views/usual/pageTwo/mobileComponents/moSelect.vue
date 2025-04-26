@@ -1,15 +1,16 @@
 <template>
   <van-field
-    v-model="fieldValue"
+    :model-value="fieldValue"
+    :label="props.selectItemConfig.label"
+    :placeholder="props.selectItemConfig.placeholder"
     is-link
     readonly
-    label="城市"
-    placeholder="选择城市"
     @click="showPicker = true"
   />
   <van-popup v-model:show="showPicker" destroy-on-close round position="bottom">
     <van-picker
       :model-value="pickerValue"
+      :columns-field-names="{ text: 'label' }"
       :columns="columns"
       @cancel="showPicker = false"
       @confirm="onConfirm"
@@ -18,39 +19,29 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 const props = defineProps({
-  modelValue: String,
+  modelValue: [String, Number],
   selectItemConfig: {
     type: Object,
     default: () => {},
   },
 });
-// const columns = [
-//   { text: "杭州", value: "Hangzhou" },
-//   { text: "宁波", value: "Ningbo" },
-//   { text: "温州", value: "Wenzhou" },
-//   { text: "绍兴", value: "Shaoxing" },
-//   { text: "湖州", value: "Huzhou" },
-// ];
-
+const showPicker = ref(false);
+const emit = defineEmits(["update:modelValue"]);
 const columns = computed(() => {
   return props.selectItemConfig.options;
 });
-const fieldValue = ref("");
-const showPicker = ref(false);
-const pickerValue = ref([]);
-const onConfirm = ({ selectedValues, selectedOptions }) => {
-  showPicker.value = false;
-  pickerValue.value = selectedValues;
-  fieldValue.value = selectedOptions[0].text;
-};
-onMounted(() => {
-  setTimeout(() => {
-    // console.log(props.selectItemConfig.options);
-    console.log(columns);
-  }, 1000);
-});
-</script>
+const currentOption = computed(() =>
+  props.selectItemConfig.options.find((item) => item.value === props.modelValue)
+);
 
-<style scoped></style>
+const fieldValue = computed(() => currentOption.value?.label ?? "");
+const pickerValue = computed(() =>
+  currentOption.value?.value ? [currentOption.value.value] : []
+);
+const onConfirm = ({ selectedValues }) => {
+  showPicker.value = false;
+  emit("update:modelValue", selectedValues[0]);
+};
+</script>
