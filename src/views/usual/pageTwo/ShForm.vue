@@ -27,9 +27,10 @@ export default defineComponent({
   setup(props, { expose }) {
     // console.log(props.modelValue, 1111);
     const formRef = ref();
-    // onMounted(() => {
-    //   console.log("aaa", formRef.value);
-    // });
+    onMounted(() => {
+      // console.log("aaa", formRef.value);
+      console.log(props.modelValue, 1111);
+    });
     const resetFields = () => {
       return formRef.value?.resetFields();
     };
@@ -41,9 +42,12 @@ export default defineComponent({
       if (props.scene === "detail") {
         return <DetailForm />;
       }
-      {/* ref={formRef} */}
+      {
+        /* ref={formRef} */
+      }
       return isMobile ? (
         <MobileForm
+          ref={formRef}
           formConfig={props.formConfig}
           v-model={props.modelValue}
         />

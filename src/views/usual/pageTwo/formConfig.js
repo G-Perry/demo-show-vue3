@@ -154,6 +154,7 @@ export const formConfigs = [
     label: "时间范围选择器",
     prop: "timePickerRange",
     type: "timePickerRange",
+    placeholder: "请选择时间范围",
     rangeSeparator: "至",
     startPlaceholder: "开始时间",
     endPlaceholder: "开始时间",
@@ -184,6 +185,7 @@ export const formConfigs = [
     label: "日期范围选择器",
     prop: "datePickerRange",
     type: "datePickerRange",
+    placeholder: "请选择日期范围",
     rangeSeparator: "至",
     startPlaceholder: "开始日期",
     endPlaceholder: "开始日期",
@@ -210,20 +212,20 @@ export const formConfigs = [
       },
     ],
   },
-  {
-    label: "日期时间范围选择器",
-    prop: "dateTimePickerRange",
-    type: "dateTimePickerRange",
-    rangeSeparator: "至",
-    startPlaceholder: "开始日期",
-    endPlaceholder: "开始日期",
-    span: 12,
-    rules: [
-      {
-        required: true,
-        message: "Please pick a date",
-        trigger: "change",
-      },
-    ],
-  },
+  // {
+  //   label: "日期时间范围选择器",
+  //   prop: "dateTimePickerRange",
+  //   type: "dateTimePickerRange",
+  //   rangeSeparator: "至",
+  //   startPlaceholder: "开始日期",
+  //   endPlaceholder: "开始日期",
+  //   span: 12,
+  //   rules: [
+  //     {
+  //       required: true,
+  //       message: "Please pick a date",
+  //       trigger: "change",
+  //     },
+  //   ],
+  // },
 ];

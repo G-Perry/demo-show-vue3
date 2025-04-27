@@ -4,15 +4,16 @@
     :label="props.selectItemConfig.label"
     :placeholder="props.selectItemConfig.placeholder"
     is-link
-    readonly
     :rules="props.selectItemConfig.rules"
+    readonly
     @click="showPicker = true"
   />
   <van-popup v-model:show="showPicker" destroy-on-close round position="bottom">
-    <van-picker
+    <van-time-picker
       :model-value="pickerValue"
-      :columns-field-names="{ text: 'label' }"
-      :columns="columns"
+      title="选择时间"
+      :columns-type="['hour', 'minute', 'second']"
+      :formatter="formatter"
       @cancel="showPicker = false"
       @confirm="onConfirm"
     />
@@ -22,7 +23,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 const props = defineProps({
-  modelValue: [String, Number],
+  modelValue: String,
   selectItemConfig: {
     type: Object,
     default: () => {},
@@ -30,19 +31,25 @@ const props = defineProps({
 });
 const showPicker = ref(false);
 const emit = defineEmits(["update:modelValue"]);
-const columns = computed(() => {
-  return props.selectItemConfig.options;
-});
-const currentOption = computed(() =>
-  props.selectItemConfig.options.find((item) => item.value === props.modelValue)
-);
+const formatter = (type, option) => {
+  if (type === "hour") {
+    option.text += "时";
+  }
+  if (type === "minute") {
+    option.text += "分";
+  }
+  if (type === "second") {
+    option.text += "秒";
+  }
+  return option;
+};
 
-const fieldValue = computed(() => currentOption.value?.label ?? "");
+const fieldValue = computed(() => props.modelValue);
 const pickerValue = computed(() =>
-  currentOption.value?.value ? [currentOption.value.value] : []
+  props.modelValue ? props.modelValue.split(":") : []
 );
 const onConfirm = ({ selectedValues }) => {
   showPicker.value = false;
-  emit("update:modelValue", selectedValues[0]);
+  emit("update:modelValue", selectedValues.join(":"));
 };
 </script>

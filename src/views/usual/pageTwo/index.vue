@@ -32,7 +32,6 @@ const formData = ref({
 const submitForm = async () => {
   console.log(formData.value);
   if (!formRef.value) return;
-
   try {
     await formRef.value.validate();
     console.log("submit!");

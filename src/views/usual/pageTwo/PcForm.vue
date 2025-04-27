@@ -205,17 +205,17 @@ export default defineComponent({
               value-format="YYYY-MM-DD"
             />
           );
-        case "dateTimePickerRange":
-          return (
-            <el-date-picker
-              v-model={props.modelValue[item.prop]}
-              type="datetimerange"
-              rangeSeparator={item.rangeSeparator || "To"}
-              start-placeholder={item.startPlaceholder || "Start time"}
-              endPlaceholder={item.endPlaceholder || "End time"}
-              value-format="YYYY-MM-DD HH:mm:ss"
-            />
-          );
+        // case "dateTimePickerRange":
+        //   return (
+        //     <el-date-picker
+        //       v-model={props.modelValue[item.prop]}
+        //       type="datetimerange"
+        //       rangeSeparator={item.rangeSeparator || "To"}
+        //       start-placeholder={item.startPlaceholder || "Start time"}
+        //       endPlaceholder={item.endPlaceholder || "End time"}
+        //       value-format="YYYY-MM-DD HH:mm:ss"
+        //     />
+        //   );
         case "switch":
           return <el-switch v-model={props.modelValue[item.prop]} />;
 

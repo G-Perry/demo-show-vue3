@@ -6,9 +6,15 @@ import {
   computed,
   unref,
   onMounted,
+  onBeforeMount,
 } from "vue";
 import moSelect from "./mobileComponents/moSelect.vue";
-
+import moTimeSelect from "./mobileComponents/moTimeSelect.vue";
+import moTimeSelectRange from "./mobileComponents/moTimeSelectRange.vue";
+import moDateSelect from "./mobileComponents/moDateSelect.vue";
+import moDateSelectRange from "./mobileComponents/moDateSelectRange.vue";
+import moDateTimeSelect from "./mobileComponents/moDateTimeSelect.vue";
+import {deepClone} from "@/utils/index.js"
 export default defineComponent({
   name: "MobileForm",
   props: {
@@ -21,27 +27,22 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props, { expose }) {
+  setup(props, {  expose }) {
     const formRef = ref();
+    let originalModelValue = ref(deepClone(props.modelValue));
     const resetFields = () => {
-      return formRef.value?.resetFields();
+      for (let key in originalModelValue.value) {
+        props.modelValue[key]= originalModelValue.value[key];
+      }
+      formRef.value?.resetValidation();
     };
     const validate = () => {
       return formRef.value?.validate();
     };
     expose({ resetFields, validate });
-    const buildRules = (formConfig) => {
-      let rules = {};
-      formConfig.forEach((item) => {
-        if (Array.isArray(item.rules) && item.rules.length) {
-          rules[item.prop] = item.rules;
-        }
-      });
-      return rules;
-    };
     const renderForm = (formConfig) => {
       return (
-        <van-form>
+        <van-form ref={formRef}>
           <van-cell-group border={false}>
             {renderFormItem(formConfig)}
           </van-cell-group>
@@ -49,28 +50,25 @@ export default defineComponent({
       );
     };
     const itemIsShow = (item) => {
-      // if (item.show) {
-      //   return item.show(props.modelValue) ? true : false;
-      // } else {
-      //   return true;
-      // }
       if (item.show) {
         let show = item.show(props.modelValue);
         if (!show) {
           props.modelValue[item.prop] = undefined;
         }
-        return show ? "block" : "none";
+        return show;
       } else {
-        return "block";
+        return true;
       }
     };
 
     const renderFormItem = (formConfig) => {
       return formConfig.map((item) => {
-        if (item.type === "classifyTitle") {
-          return <span class="classify_title">{item.label}</span>;
+        if (itemIsShow(item)) {
+          if (item.type === "classifyTitle") {
+            return <span class="classify_title">{item.label}</span>;
+          }
+          return renderlabelAndInput(item);
         }
-        return renderlabelAndInput(item);
       });
     };
 
@@ -83,6 +81,7 @@ export default defineComponent({
               name={item.prop}
               label={item.label}
               placeholder={item.placeholder}
+              rules={item.rules}
             />
           );
         case "textarea":
@@ -92,6 +91,7 @@ export default defineComponent({
               placeholder={item.placeholder}
               name={item.prop}
               label={item.label}
+              rules={item.rules}
               rows="2"
               autosize
               type="textarea"
@@ -108,7 +108,12 @@ export default defineComponent({
           );
         case "radio":
           return (
-            <van-field name={item.prop} label={item.label} label-align="top">
+            <van-field
+              name={item.prop}
+              label={item.label}
+              label-align="top"
+              rules={item.rules}
+            >
               {{
                 input: () => (
                   <van-radio-group
@@ -128,7 +133,12 @@ export default defineComponent({
           );
         case "checkbox":
           return (
-            <van-field name={item.prop} label={item.label} label-align="top">
+            <van-field
+              name={item.prop}
+              label={item.label}
+              label-align="top"
+              rules={item.rules}
+            >
               {{
                 input: () => (
                   <van-checkbox-group
@@ -146,77 +156,52 @@ export default defineComponent({
               }}
             </van-field>
           );
-          return (
-            <el-checkbox-group v-model={props.modelValue[item.prop]}>
-              {item.options.map((option) => (
-                <el-checkbox key={option.value} label={option.value}>
-                  {option.label}
-                </el-checkbox>
-              ))}
-            </el-checkbox-group>
-          );
         case "timePicker":
           return (
-            <el-time-picker
+            <moTimeSelect
               v-model={props.modelValue[item.prop]}
-              placeholder={item.placeholder}
-              style="width: 100%"
-              value-format="HH:mm:ss"
-            />
+              selectItemConfig={item}
+            ></moTimeSelect>
           );
         case "datePicker":
           return (
-            <el-date-picker
+            <moDateSelect
               v-model={props.modelValue[item.prop]}
-              placeholder={item.placeholder}
-              type="date"
-              style="width: 100%"
-              value-format="YYYY-MM-DD"
-            />
+              selectItemConfig={item}
+            ></moDateSelect>
           );
         case "dateTimePicker":
           return (
-            <el-date-picker
+            <moDateTimeSelect
               v-model={props.modelValue[item.prop]}
-              placeholder={item.placeholder}
-              type="datetime"
-              style="width: 100%"
-              value-format="YYYY-MM-DD HH:mm:ss"
-            />
+              selectItemConfig={item}
+            ></moDateTimeSelect>
           );
         case "timePickerRange":
           return (
-            <el-time-picker
+            <moTimeSelectRange
               v-model={props.modelValue[item.prop]}
-              is-range
-              rangeSeparator={item.rangeSeparator || "To"}
-              start-placeholder={item.startPlaceholder || "Start time"}
-              endPlaceholder={item.endPlaceholder || "End time"}
-              value-format="HH:mm:ss"
-            />
+              selectItemConfig={item}
+            ></moTimeSelectRange>
           );
         case "datePickerRange":
           return (
-            <el-date-picker
+            <moDateSelectRange
               v-model={props.modelValue[item.prop]}
-              type="daterange"
-              rangeSeparator={item.rangeSeparator || "To"}
-              start-placeholder={item.startPlaceholder || "Start time"}
-              endPlaceholder={item.endPlaceholder || "End time"}
-              value-format="YYYY-MM-DD"
-            />
+              selectItemConfig={item}
+            ></moDateSelectRange>
           );
-        case "dateTimePickerRange":
-          return (
-            <el-date-picker
-              v-model={props.modelValue[item.prop]}
-              type="datetimerange"
-              rangeSeparator={item.rangeSeparator || "To"}
-              start-placeholder={item.startPlaceholder || "Start time"}
-              endPlaceholder={item.endPlaceholder || "End time"}
-              value-format="YYYY-MM-DD HH:mm:ss"
-            />
-          );
+        // case "dateTimePickerRange":
+        //   return (
+        //     <el-date-picker
+        //       v-model={props.modelValue[item.prop]}
+        //       type="datetimerange"
+        //       rangeSeparator={item.rangeSeparator || "To"}
+        //       start-placeholder={item.startPlaceholder || "Start time"}
+        //       endPlaceholder={item.endPlaceholder || "End time"}
+        //       value-format="YYYY-MM-DD HH:mm:ss"
+        //     />
+        //   );
         case "switch":
           return (
             <van-field name={item.prop} label={item.label}>
@@ -245,5 +230,9 @@ export default defineComponent({
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(clamp(80px, 30%, 200px), 1fr));
   gap: 10px;
+}
+::v-deep .van-field__label{
+  width: auto;
+  min-width: 70px;
 }
 </style>
