@@ -1,5 +1,13 @@
 <template>
-  <div style="width: 100%; height: 100%; background-color: #fff; padding: 10px;overflow: auto;">
+  <div
+    style="
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      padding: 10px;
+      overflow: auto;
+    "
+  >
     <ShForm ref="formRef" v-model="formData" :formConfig="formConfig"></ShForm>
     <el-button type="success" @click="submitForm">提 交</el-button>
     <el-button type="success" @click="resetForm">重 置</el-button>
@@ -56,42 +64,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style lang="scss">
-.classify_title {
-  padding-left: 5px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-  position: relative;
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 20px;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 10px;
-    top: calc(100% + 6px);
-    width: calc(100% - 10px);
-    height: 5px;
-    background-color: #ccf1eb;
-    // background-color: #79bcff93;
-    border-radius: 5px;
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: calc(100% + 3px);
-    width: 8em;
-    height: 8px;
-    background-color: #00b899;
-    // background-color: #409eff;
-    border-radius: 0 10px 0 10px;
-    z-index: 1;
-  }
-}
-</style>

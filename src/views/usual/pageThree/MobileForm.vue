@@ -8,13 +8,13 @@ import {
   onMounted,
   onBeforeMount,
 } from "vue";
-import moSelect from "./mobileComponents/moSelect.vue";
-import moTimeSelect from "./mobileComponents/moTimeSelect.vue";
-import moTimeSelectRange from "./mobileComponents/moTimeSelectRange.vue";
-import moDateSelect from "./mobileComponents/moDateSelect.vue";
-import moDateSelectRange from "./mobileComponents/moDateSelectRange.vue";
-import moDateTimeSelect from "./mobileComponents/moDateTimeSelect.vue";
-import {deepClone} from "@/utils/index.js"
+import moSelect from "@/views/usual/pageTwo/mobileComponents/moSelect.vue";
+import moTimeSelect from "@/views/usual/pageTwo/mobileComponents/moTimeSelect.vue";
+import moTimeSelectRange from "@/views/usual/pageTwo/mobileComponents/moTimeSelectRange.vue";
+import moDateSelect from "@/views/usual/pageTwo/mobileComponents/moDateSelect.vue";
+import moDateSelectRange from "@/views/usual/pageTwo/mobileComponents/moDateSelectRange.vue";
+import moDateTimeSelect from "@/views/usual/pageTwo/mobileComponents/moDateTimeSelect.vue";
+import { deepClone } from "@/utils/index.js";
 export default defineComponent({
   name: "MobileForm",
   props: {
@@ -27,12 +27,12 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props, {  expose }) {
+  setup(props, { expose }) {
     const formRef = ref();
     let originalModelValue = ref(deepClone(props.modelValue));
     const resetFields = () => {
       for (let key in originalModelValue.value) {
-        props.modelValue[key]= originalModelValue.value[key];
+        props.modelValue[key] = originalModelValue.value[key];
       }
       formRef.value?.resetValidation();
     };
@@ -231,7 +231,7 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fit, minmax(clamp(80px, 30%, 200px), 1fr));
   gap: 10px;
 }
-:deep(.van-field__label){
+:deep(.van-field__label) {
   width: auto;
   min-width: 70px;
 }
