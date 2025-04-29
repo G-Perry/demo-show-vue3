@@ -21,12 +21,22 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props) {
-    let arrList = computed(() => props.formConfig);
+  setup(props, { emit }) {
+    // let arrList = computed(() => props.formConfig);
+    // const emit = defineEmits(['update-form-config']);
+
+    const localFormConfig = computed({
+      get: () => props.formConfig,
+      set: (val) => emit("update-form-config", val),
+    });
     const renderForm = () => {
       return (
         <el-form label-position="top">
-          <draggable v-model={arrList.value} class="el-row" animation={340}>
+          <draggable
+            v-model={localFormConfig.value}
+            class="el-row"
+            animation={340}
+          >
             {{
               item: ({ element, index }) => renderFormItem(element, index),
             }}
@@ -39,7 +49,8 @@ export default defineComponent({
       props.formConfig.splice(index, 1);
     };
     const handleItemClick = (item, index) => {
-      console.log(item, index);
+      // console.log(item, index);
+      emit("form-item-select", item, index);
     };
     const renderFormItem = (item, index) => {
       if (item.type === "classifyTitle") {
@@ -72,7 +83,6 @@ export default defineComponent({
           </el-form-item>
         </el-col>
       );
-      // });
     };
 
     const renderlabelAndInput = (item) => {

@@ -17,21 +17,29 @@
       <div :class="scene + '_form'">
         <ShForm
           v-model="formData"
-          :form-config="formConfig"
           :scene="scene"
+          :form-config="formConfig"
+          @update-form-config="updateFormConfig"
+          @form-item-select="formItemSelect"
         ></ShForm>
       </div>
     </div>
-    <div class="three"></div>
+    <div class="three">
+      <formItemConfig
+        v-model="currentIndex"
+        :formConfig="formConfig"
+      ></formItemConfig>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import ShForm from "./ShFormShow.vue";
-let scene = ref("pc");
+import formItemConfig from "./formItemConfig.vue";
+let scene = ref("design");
 const change = (val) => {
-  console.log(scene.value, val);
+  // console.log(scene.value, val);
 };
 
 const btns = reactive([
@@ -222,11 +230,23 @@ const btns = reactive([
     },
   },
 ]);
+
 const formConfig = ref([]);
 const formData = ref({});
 const handleAdd = (item) => {
   formData.value[item.defaultConfig.prop] = item.defaultValue;
   formConfig.value.push(item.defaultConfig);
+};
+const updateFormConfig = (newConfig) => {
+  currentIndex.value = null;
+  formConfig.value = newConfig;
+};
+
+const currentIndex = ref(null);
+const formItemSelect = (item, index) => {
+  // console.log(item, index);
+  console.log(formConfig.value);
+  currentIndex.value = index;
 };
 </script>
 
@@ -283,5 +303,6 @@ const handleAdd = (item) => {
 }
 .three {
   flex: 2;
+  padding: 10px;
 }
 </style>

@@ -21,7 +21,7 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props, { expose }) {
+  setup(props, { emit, expose }) {
     const formRef = ref();
     const resetFields = () => {
       return formRef.value?.resetFields();
@@ -49,6 +49,10 @@ export default defineComponent({
             ref={formRef}
             formConfig={props.formConfig}
             v-model={props.modelValue}
+            on-update-form-config={(val) => emit("update-form-config", val)}
+            on-form-item-select={(item, index) =>
+              emit("form-item-select", item, index)
+            }
           />
         );
       }
