@@ -13,6 +13,9 @@
           <el-radio-button label="mobile">MOBILE</el-radio-button>
           <el-radio-button label="details">DETAILS</el-radio-button>
         </el-radio-group>
+        <el-button type="primary" plain size="small" @click="handleGenerateJson"
+          >生成JSON</el-button
+        >
       </header>
       <div :class="scene + '_form'">
         <ShForm
@@ -31,10 +34,23 @@
       ></formItemConfig>
     </div>
   </section>
+  <el-drawer v-model="drawerVisible" append-to-body :with-header="false">
+    <el-button
+      type="primary"
+      plain
+      size="small"
+      @click="handleGenerateJsonCopy"
+      style="position: absolute; right: 30px; top: 30px"
+      >复制JSON</el-button
+    >
+    <code>
+      <pre>{{ formConfig }}</pre>
+    </code>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, unref, reactive } from "vue";
 import ShForm from "./ShFormShow.vue";
 import formItemConfig from "./formItemConfig.vue";
 let scene = ref("design");
@@ -244,9 +260,29 @@ const updateFormConfig = (newConfig) => {
 
 const currentIndex = ref(null);
 const formItemSelect = (item, index) => {
-  // console.log(item, index);
-  console.log(formConfig.value);
+  // // console.log(item, index);
+  // console.log(formConfig.value);
   currentIndex.value = index;
+};
+let drawerVisible = ref(false);
+const handleGenerateJson = () => {
+  drawerVisible.value = true;
+  console.log(formConfig.value);
+};
+
+import { useClipboard } from "@vueuse/core";
+// 复制formConfig
+const handleGenerateJsonCopy = async () => {
+  const textToCopy = JSON.stringify(formConfig.value, null, 2);
+  const { copy, copied, isSupported } = useClipboard({ source: textToCopy });
+  if (!isSupported) {
+    // console.log("XXXXX");
+  } else {
+    await copy();
+    if (unref(copied)) {
+      // console.log("VVVVV");
+    }
+  }
 };
 </script>
 
@@ -285,6 +321,7 @@ const formItemSelect = (item, index) => {
     padding: 0 10px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   .design_form,
   .pc_form {

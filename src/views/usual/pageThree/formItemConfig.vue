@@ -11,7 +11,10 @@
       <el-form-item label="字段名">
         <el-input v-model="currentItem.prop" />
       </el-form-item>
-      <el-form-item label="提示">
+      <el-form-item
+        label="提示"
+        v-if="!['switch', 'radio', 'checkbox'].includes(currentItem.type)"
+      >
         <el-input v-model="currentItem.placeholder" />
       </el-form-item>
     </template>
