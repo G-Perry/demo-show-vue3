@@ -38,6 +38,11 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/mobile/form/preview',
+    component: () => import('../views/usual/pageThree/MobileForm.vue'),
+    hidden: true
+  },
+  {
     path: '/login',
     component: () => import('@/views/login'),
     hidden: true

@@ -7,6 +7,10 @@ import {
   unref,
   onMounted,
 } from "vue";
+// import { useCascaderAreaData } from "@vant/area-data";
+// console.log(useCascaderAreaData());
+// import { getAreaTree } from "@/api/usual/index";
+import pcAreaSelect from "@/views/usual/pageTwo/pcComponents/pcAreaSelect.vue";
 
 export default defineComponent({
   name: "PcForm",
@@ -105,6 +109,7 @@ export default defineComponent({
             <el-input
               v-model={props.modelValue[item.prop]}
               placeholder={item.placeholder}
+              disabled={item.disabled || false}
             />
           );
         case "textarea":
@@ -139,7 +144,11 @@ export default defineComponent({
             <el-radio-group v-model={props.modelValue[item.prop]}>
               {item.options.map((option) => (
                 <el-radio key={option.value} label={option.value}>
-                  {option.label}
+                  {item.showByTag ? (
+                    <el-tag type={option.tagType}>{option.label}</el-tag>
+                  ) : (
+                    option.label
+                  )}
                 </el-radio>
               ))}
             </el-radio-group>
@@ -218,6 +227,20 @@ export default defineComponent({
         //   );
         case "switch":
           return <el-switch v-model={props.modelValue[item.prop]} />;
+        case "areaPicker":
+          return (
+            <pcAreaSelect
+              v-model={props.modelValue[item.prop]}
+              selectItemConfig={item}
+            ></pcAreaSelect>
+          );
+        case "justText":
+          return (
+            <div style="display: flex; align-items: center;gap:5px">
+              <span>{props.modelValue[item.prop] || "-"}</span>
+              <span>{item.defaultText}</span>
+            </div>
+          );
 
         default:
           return <div>-</div>;
@@ -227,3 +250,9 @@ export default defineComponent({
   },
 });
 </script>
+<!-- <style>
+.justText:empty::before {
+  content: "-";
+  color: gray;
+}
+</style> -->

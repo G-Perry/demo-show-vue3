@@ -1,7 +1,7 @@
 <script lang="tsx">
 import { defineComponent, ref, computed, onMounted } from "vue";
 import Design from "./Design.vue";
-import MobileForm from "./MobileForm.vue";
+// import MobileForm from "./MobileForm.vue";
 import DetailForm from "./DetailForm.vue";
 import PcForm from "./PcForm.vue";
 
@@ -21,6 +21,7 @@ export default defineComponent({
       default: () => {},
     },
   },
+  
   setup(props, { emit, expose }) {
     const formRef = ref();
     const resetFields = () => {
@@ -31,16 +32,24 @@ export default defineComponent({
     };
     expose({ resetFields, validate });
     return () => {
-      if (props.scene === "detail") {
+      if (props.scene === "details") {
         return <DetailForm />;
       }
       if (props.scene === "mobile") {
         return (
-          <MobileForm
-            ref={formRef}
-            formConfig={props.formConfig}
-            v-model={props.modelValue}
-          />
+          // <iframe>
+          //   <MobileForm
+          //     ref={formRef}
+          //     formConfig={props.formConfig}
+          //     v-model={props.modelValue}
+          //   />
+          // </iframe>
+            // src="http://localhost:9091/mobile/form/preview"
+          <iframe
+            src={window.location.origin  + "/mobile/form/preview"}
+            title="示例网站"
+            style="width:100%;height:100%;border:none;box-sizing:border-box;"
+          ></iframe>
         );
       }
       if (props.scene === "design") {

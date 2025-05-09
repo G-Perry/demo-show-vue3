@@ -8,6 +8,7 @@ import {
   onMounted,
 } from "vue";
 import draggable from "vuedraggable";
+import pcAreaSelect from "@/views/usual/pageTwo/pcComponents/pcAreaSelect.vue";
 
 export default defineComponent({
   name: "PcForm",
@@ -126,7 +127,11 @@ export default defineComponent({
             <el-radio-group v-model={props.modelValue[item.prop]}>
               {item.options.map((option) => (
                 <el-radio key={option.value} label={option.value}>
-                  {option.label}
+                  {item.showByTag ? (
+                    <el-tag type={option.tagType}>{option.label}</el-tag>
+                  ) : (
+                    option.label
+                  )}
                 </el-radio>
               ))}
             </el-radio-group>
@@ -205,6 +210,20 @@ export default defineComponent({
         //   );
         case "switch":
           return <el-switch v-model={props.modelValue[item.prop]} />;
+        case "areaPicker":
+          return (
+            <pcAreaSelect
+              v-model={props.modelValue[item.prop]}
+              selectItemConfig={item}
+            ></pcAreaSelect>
+          );
+        case "justText":
+          return (
+            <div style="display: flex; align-items: center;gap:5px">
+              <span>{props.modelValue[item.prop] || "-"}</span>
+              <span>{item.defaultText}</span>
+            </div>
+          );
 
         default:
           return <div>-</div>;

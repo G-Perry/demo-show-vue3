@@ -105,6 +105,7 @@ export default defineComponent({
             <el-input
               v-model={props.modelValue[item.prop]}
               placeholder={item.placeholder}
+              disabled={item.disabled || false}
             />
           );
         case "textarea":

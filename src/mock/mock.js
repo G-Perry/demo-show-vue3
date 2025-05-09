@@ -23,3 +23,4 @@ Mock.mock(/api\/usual\/list\/userEdit/, "post", usualPageApi.userEdit);
 Mock.mock(/api\/usual\/userDelete/, "delete", usualPageApi.userDeleteById);
 
 Mock.mock(/api\/usual\/select\/options/, "get", usualPageApi.getSelectOptions);
+Mock.mock(/api\/system\/area\/tree/, "get", usualPageApi.getAreaTree);

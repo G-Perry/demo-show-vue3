@@ -64,3 +64,9 @@ export function getSelectOptions() {
     method: "get",
   });
 }
+export function getAreaTree() {
+  return http.request({
+    url: "/system/area/tree",
+    method: "get",
+  });
+}

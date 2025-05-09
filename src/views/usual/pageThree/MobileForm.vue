@@ -14,32 +14,18 @@ import moTimeSelectRange from "@/views/usual/pageTwo/mobileComponents/moTimeSele
 import moDateSelect from "@/views/usual/pageTwo/mobileComponents/moDateSelect.vue";
 import moDateSelectRange from "@/views/usual/pageTwo/mobileComponents/moDateSelectRange.vue";
 import moDateTimeSelect from "@/views/usual/pageTwo/mobileComponents/moDateTimeSelect.vue";
-import { deepClone } from "@/utils/index.js";
+import moAreaSelect from "@/views/usual/pageTwo/mobileComponents/moAreaSelect.vue";
+// import { deepClone } from "@/utils/index.js";
+
 export default defineComponent({
   name: "MobileForm",
-  props: {
-    formConfig: {
-      type: Array,
-      default: () => [],
-    },
-    modelValue: {
-      type: Object,
-      default: () => {},
-    },
-  },
-  setup(props, { expose }) {
+  setup() {
+    const formConfig = computed(() =>
+      JSON.parse(sessionStorage.getItem("formConfig"))
+    );
+    const modelValue = computed(() => {});
+
     const formRef = ref();
-    let originalModelValue = ref(deepClone(props.modelValue));
-    const resetFields = () => {
-      for (let key in originalModelValue.value) {
-        props.modelValue[key] = originalModelValue.value[key];
-      }
-      formRef.value?.resetValidation();
-    };
-    const validate = () => {
-      return formRef.value?.validate();
-    };
-    expose({ resetFields, validate });
     const renderForm = (formConfig) => {
       return (
         <van-form ref={formRef}>
@@ -51,9 +37,9 @@ export default defineComponent({
     };
     const itemIsShow = (item) => {
       if (item.show) {
-        let show = item.show(props.modelValue);
+        let show = item.show(modelValue.value);
         if (!show) {
-          props.modelValue[item.prop] = undefined;
+          modelValue.value[item.prop] = undefined;
         }
         return show;
       } else {
@@ -75,9 +61,9 @@ export default defineComponent({
     const renderlabelAndInput = (item) => {
       switch (item.type) {
         case "input":
+          // v-model={modelValue.value[item.prop]}
           return (
             <van-field
-              v-model={props.modelValue[item.prop]}
               name={item.prop}
               label={item.label}
               placeholder={item.placeholder}
@@ -85,9 +71,9 @@ export default defineComponent({
             />
           );
         case "textarea":
+          // v-model={modelValue.value[item.prop]}
           return (
             <van-field
-              v-model={props.modelValue[item.prop]}
               placeholder={item.placeholder}
               name={item.prop}
               label={item.label}
@@ -100,13 +86,10 @@ export default defineComponent({
             />
           );
         case "select":
-          return (
-            <moSelect
-              v-model={props.modelValue[item.prop]}
-              selectItemConfig={item}
-            ></moSelect>
-          );
+          // v-model={modelValue.value[item.prop]}
+          return <moSelect selectItemConfig={item}></moSelect>;
         case "radio":
+          // v-model={modelValue.value[item.prop]}
           return (
             <van-field
               name={item.prop}
@@ -116,11 +99,7 @@ export default defineComponent({
             >
               {{
                 input: () => (
-                  <van-radio-group
-                    v-model={props.modelValue[item.prop]}
-                    shape="dot"
-                    class="mobile-radio-group"
-                  >
+                  <van-radio-group shape="dot" class="mobile-radio-group">
                     {item.options.map((option) => (
                       <van-radio key={option.value} name={option.value}>
                         {option.label}
@@ -132,6 +111,7 @@ export default defineComponent({
             </van-field>
           );
         case "checkbox":
+          // v-model={modelValue.value[item.prop]}
           return (
             <van-field
               name={item.prop}
@@ -141,11 +121,7 @@ export default defineComponent({
             >
               {{
                 input: () => (
-                  <van-checkbox-group
-                    v-model={props.modelValue[item.prop]}
-                    shape="square"
-                    class="mobile-radio-group"
-                  >
+                  <van-checkbox-group shape="square" class="mobile-radio-group">
                     {item.options.map((option) => (
                       <van-checkbox key={option.value} name={option.value}>
                         {option.label}
@@ -157,61 +133,33 @@ export default defineComponent({
             </van-field>
           );
         case "timePicker":
-          return (
-            <moTimeSelect
-              v-model={props.modelValue[item.prop]}
-              selectItemConfig={item}
-            ></moTimeSelect>
-          );
+          // v-model={modelValue.value[item.prop]}
+          return <moTimeSelect selectItemConfig={item}></moTimeSelect>;
         case "datePicker":
-          return (
-            <moDateSelect
-              v-model={props.modelValue[item.prop]}
-              selectItemConfig={item}
-            ></moDateSelect>
-          );
+          // v-model={modelValue.value[item.prop]}
+          return <moDateSelect selectItemConfig={item}></moDateSelect>;
         case "dateTimePicker":
-          return (
-            <moDateTimeSelect
-              v-model={props.modelValue[item.prop]}
-              selectItemConfig={item}
-            ></moDateTimeSelect>
-          );
+          // v-model={modelValue.value[item.prop]}
+          return <moDateTimeSelect selectItemConfig={item}></moDateTimeSelect>;
         case "timePickerRange":
+          // v-model={modelValue.value[item.prop]}
           return (
-            <moTimeSelectRange
-              v-model={props.modelValue[item.prop]}
-              selectItemConfig={item}
-            ></moTimeSelectRange>
+            <moTimeSelectRange selectItemConfig={item}></moTimeSelectRange>
           );
         case "datePickerRange":
+          // v-model={modelValue.value[item.prop]}
           return (
-            <moDateSelectRange
-              v-model={props.modelValue[item.prop]}
-              selectItemConfig={item}
-            ></moDateSelectRange>
+            <moDateSelectRange selectItemConfig={item}></moDateSelectRange>
           );
-        // case "dateTimePickerRange":
-        //   return (
-        //     <el-date-picker
-        //       v-model={props.modelValue[item.prop]}
-        //       type="datetimerange"
-        //       rangeSeparator={item.rangeSeparator || "To"}
-        //       start-placeholder={item.startPlaceholder || "Start time"}
-        //       endPlaceholder={item.endPlaceholder || "End time"}
-        //       value-format="YYYY-MM-DD HH:mm:ss"
-        //     />
-        //   );
+        case "areaPicker":
+          // v-model={modelValue.value[item.prop]}
+          return <moAreaSelect selectItemConfig={item}></moAreaSelect>;
         case "switch":
+          // v-model={modelValue.value[item.prop]}
           return (
             <van-field name={item.prop} label={item.label}>
               {{
-                input: () => (
-                  <van-switch
-                    v-model={props.modelValue[item.prop]}
-                    size="20px"
-                  />
-                ),
+                input: () => <van-switch size="20px" />,
               }}
             </van-field>
           );
@@ -220,11 +168,19 @@ export default defineComponent({
           return <div>-</div>;
       }
     };
-    return () => renderForm(props.formConfig);
+    return () => renderForm(formConfig.value);
   },
 });
 </script>
-<style scoped>
+<style lang="scss">
+#app {
+  border-radius: 15px;
+  border: 1px solid #ccc;
+  background-color: #f7f8fa;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 .mobile-radio-group {
   width: 100%;
   display: grid;
@@ -234,5 +190,42 @@ export default defineComponent({
 :deep(.van-field__label) {
   width: auto;
   min-width: 70px;
+}
+.classify_title {
+  padding-left: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  position: relative;
+  display: block;
+  width: 100%;
+  // margin-top: 10px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: calc(100% + 6px);
+    width: calc(100% - 40px);
+    height: 5px;
+    background-color: #ccf1eb;
+    // background-color: #79bcff93;
+    border-radius: 5px;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: calc(100% + 3px);
+    width: 8em;
+    height: 8px;
+    background-color: #00b899;
+    // background-color: #409eff;
+    border-radius: 0 10px 0 10px;
+    z-index: 1;
+  }
 }
 </style>
