@@ -1,12 +1,5 @@
 <script lang="jsx">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  unref,
-  onMounted,
-} from "vue";
+import { defineComponent, computed } from "vue";
 import draggable from "vuedraggable";
 import pcAreaSelect from "@/views/usual/pageTwo/pcComponents/pcAreaSelect.vue";
 
@@ -220,11 +213,22 @@ export default defineComponent({
         case "justText":
           return (
             <div style="display: flex; align-items: center;gap:5px">
-              <span>{props.modelValue[item.prop] || "-"}</span>
-              <span>{item.defaultText}</span>
+              {item.showByTag ? (
+                item.options.map((option) => (
+                  <el-tag key={option.value} type={option.tagType || "info"}>
+                    {option.label}
+                  </el-tag>
+                ))
+              ) : (
+                <>
+                  <span>{props.modelValue[item.prop] ?? "-"}</span>
+                  <span>{item.defaultText}</span>
+                </>
+              )}
             </div>
           );
-
+        // case "upload":
+        //   return <UploadFile v-model={props.modelValue[item.prop]} />;
         default:
           return <div>-</div>;
       }

@@ -1,20 +1,27 @@
 <template>
   <!-- <div>{{ localIndex }}</div> -->
   <el-form v-if="localIndex !== null" label-position="top">
-    <el-form-item label="名称">
-      <el-input v-model="currentItem.label" />
-    </el-form-item>
-    <el-form-item label="占位">
-      <el-input v-model.number="currentItem.span" />
-    </el-form-item>
-    <template v-if="currentItem.type !== 'classifyTitle'">
+    <template v-if="currentItem.type === 'slot'">
+      <el-form-item label="插槽名">
+        <el-input v-model="currentItem.slotName" />
+      </el-form-item>
+    </template>
+    <template v-else>
+      <el-form-item label="名称">
+        <el-input v-model="currentItem.label" />
+      </el-form-item>
+      <el-form-item label="占位">
+        <el-input v-model.number="currentItem.span" />
+      </el-form-item>
+    </template>
+    <template v-if="!['classifyTitle', 'slot'].includes(currentItem.type)">
       <el-form-item label="字段名">
         <el-input v-model="currentItem.prop" />
       </el-form-item>
       <el-form-item
         label="提示"
         v-if="
-          !['switch', 'radio', 'checkbox', 'justText'].includes(
+          !['switch', 'radio', 'checkbox', 'justText' ].includes(
             currentItem.type
           )
         "
@@ -145,6 +152,7 @@ interface FormItemConfig {
   showByTag?: boolean;
   options?: any[];
   defaultText?: string;
+  slotName?: string;
 }
 
 const props = defineProps({

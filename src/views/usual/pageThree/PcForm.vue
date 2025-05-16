@@ -1,17 +1,6 @@
 <script lang="jsx">
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  unref,
-  onMounted,
-} from "vue";
-// import { useCascaderAreaData } from "@vant/area-data";
-// console.log(useCascaderAreaData());
-// import { getAreaTree } from "@/api/usual/index";
+import { defineComponent, ref } from "vue";
 import pcAreaSelect from "@/views/usual/pageTwo/pcComponents/pcAreaSelect.vue";
-
 export default defineComponent({
   name: "PcForm",
   props: {
@@ -25,6 +14,7 @@ export default defineComponent({
     },
   },
   setup(props, { expose }) {
+    // console.log(44444);
     const formRef = ref();
     const resetFields = () => {
       return formRef.value?.resetFields();
@@ -70,6 +60,30 @@ export default defineComponent({
         return "block";
       }
     };
+    const itemIsDisabled = (item) => {
+      // console.log(item)
+      // 检查属性是否存在
+      if (!item.hasOwnProperty("disabled")) {
+        // console.log('属性不存在')
+        // return '属性不存在'
+        return false;
+      }
+      const propValue = item["disabled"];
+      // 检查属性类型
+      if (typeof propValue === "boolean") {
+        // console.log('是布尔值: ' + propValue)
+        // return '是布尔值: ' + propValue
+        return propValue;
+      } else if (typeof propValue === "function") {
+        // console.log('是方法: ' + propValue)
+        // return '是方法'
+        return propValue(props.modelValue);
+      }
+      // else {
+      // return '既不是布尔值也不是方法'
+      // }
+      // return false
+    };
     const renderFormItem = (formConfig) => {
       return formConfig.map((item) => {
         if (item.type === "classifyTitle") {
@@ -109,7 +123,8 @@ export default defineComponent({
             <el-input
               v-model={props.modelValue[item.prop]}
               placeholder={item.placeholder}
-              disabled={item.disabled || false}
+              disabled={itemIsDisabled(item)}
+              onInput={(e) => item.onInput?.(e, props.modelValue)}
             />
           );
         case "textarea":
@@ -129,12 +144,14 @@ export default defineComponent({
               multiple={item.multiple || false}
               clearable={item.clearable || false}
               style="width: 100%"
+              disabled={itemIsDisabled(item)}
+              onChange={(e) => item.onChange?.(e, props.modelValue)}
             >
               {item.options.map((option) => (
                 <el-option
-                  key={option.value}
-                  label={option.label}
-                  value={option.value}
+                  key={option[item.optionsAttrName.value]}
+                  label={option[item.optionsAttrName.label]}
+                  value={option[item.optionsAttrName.value]}
                 />
               ))}
             </el-select>
@@ -145,7 +162,9 @@ export default defineComponent({
               {item.options.map((option) => (
                 <el-radio key={option.value} label={option.value}>
                   {item.showByTag ? (
-                    <el-tag type={option.tagType}>{option.label}</el-tag>
+                    <el-tag type={option.tagType || option.colorType || "info"}>
+                      {option.label}
+                    </el-tag>
                   ) : (
                     option.label
                   )}
@@ -237,11 +256,22 @@ export default defineComponent({
         case "justText":
           return (
             <div style="display: flex; align-items: center;gap:5px">
-              <span>{props.modelValue[item.prop] || "-"}</span>
-              <span>{item.defaultText}</span>
+              {item.showByTag ? (
+                item.options.map((option) => (
+                  <el-tag key={option.value} type={option.tagType || "info"}>
+                    {option.label}
+                  </el-tag>
+                ))
+              ) : (
+                <>
+                  <span>{props.modelValue[item.prop] ?? "-"}</span>
+                  <span>{item.defaultText}</span>
+                </>
+              )}
             </div>
           );
-
+        // case "upload":
+        //   return <UploadFile v-model={props.modelValue[item.prop]} />;
         default:
           return <div>-</div>;
       }
@@ -250,9 +280,3 @@ export default defineComponent({
   },
 });
 </script>
-<!-- <style>
-.justText:empty::before {
-  content: "-";
-  color: gray;
-}
-</style> -->

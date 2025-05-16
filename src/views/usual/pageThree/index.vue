@@ -150,8 +150,8 @@ const btns = reactive([
         { value: 5, label: "fff" },
       ],
       rules: [],
-      optionsAsync: true,
-      optionsFromDict: false,
+      optionsAsync: true, //异步获取options
+      optionsFromDict: false, //options来自字典
       optionsAttrName: {
         value: "id",
         label: "name",
@@ -177,7 +177,7 @@ const btns = reactive([
       ],
       defaultValue: undefined,
       rules: [],
-      showByTag: false,
+      showByTag: false, //以标签形式展示
       optionsAsync: false,
       optionsFromDict: false,
       optionsAsyncApi: "getSelectOptionsApi",
@@ -311,6 +311,62 @@ const btns = reactive([
       type: "justText",
       defaultText: "X",
       span: 12,
+    },
+  },
+  {
+    label: "纯标签展示",
+    type: "justTag",
+    defaultConfig: {
+      defaultValue: undefined,
+      label: "纯标签展示",
+      prop: "justTag",
+      type: "justTag",
+      span: 12,
+      options: [
+        {
+          value: 1,
+          label: "XXXXXX",
+          tagType: "primary",
+        },
+      ],
+      showType: "", //allTags、bindingTags
+      showByTag: false,
+      optionsAsync: false,
+      optionsFromDict: false,
+      optionsAsyncApi: "getSelectOptionsApi",
+    },
+  },
+  {
+    label: "上传",
+    type: "upload",
+    defaultConfig: {
+      defaultValue: undefined,
+      label: "上传",
+      prop: "upload",
+      type: "upload",
+      rules: [],
+      span: 12,
+    },
+  },
+  {
+    label: "富文本编辑器",
+    type: "editor",
+    defaultConfig: {
+      defaultValue: undefined,
+      label: "富文本编辑器",
+      prop: "editor",
+      type: "editor",
+      rules: [],
+      span: 24,
+    },
+  },
+  {
+    label: "插槽",
+    type: "slot",
+    defaultConfig: {
+      type: "slot",
+      slotName: "",
+      span: 24,
     },
   },
 ]);
